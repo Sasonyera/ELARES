@@ -44,13 +44,13 @@ def menu_pantalla():
     label1.place(relx=0.5, rely=0.5, anchor='center')
 
     label2 = Label(pantalla, text="Contraseña", font=("calibri", 12), fg="black", bg="white",width=11,height=1)
-    contrasena_entry=Entry(pantalla,textvariable=contrasena_verify)
+    contrasena_entry=Entry(pantalla,show="*",textvariable=contrasena_verify)
     contrasena_entry.place(relx=0.6, rely=0.6, anchor='center', width=100)
     label2.place(relx=0.6, rely=0.6, anchor='center')
     
 
     #Crear botones
-    Button (text="Iniciar Sesion", height=1,width=15,command="""inicio_sesion""").place(relx=0.5, rely=0.7, anchor='center')
+    Button (text="Iniciar Sesion", height=1,width=15,command=validacion_datos).place(relx=0.5, rely=0.7, anchor='center')
     Button (text="Registrarse", height=1,width=18, command=registrar_ventana ).place(relx=0.5, rely=0.9, anchor='center')
 
     pantalla.resizable(width=False,height=False)
@@ -104,7 +104,7 @@ def registrar_ventana():
     correoUsuario_entry=Entry(pantalla2)
     correoUsuario_entry.place(relx=0.6, rely=0.6, anchor='center',width=100)
 
-    contrasenaUsuario_entry=Entry(pantalla2)
+    contrasenaUsuario_entry=Entry(pantalla2,show="*")
     contrasenaUsuario_entry.place(relx=0.6, rely=0.7, anchor='center',width=100)
     
     Button (pantalla2,text="Registrarse", height=1,width=18, command=insert_datos ).place(relx=0.5, rely=0.9, anchor='center')
@@ -123,18 +123,43 @@ def insert_datos():
         passwd="jhice1317",
         db="elares"
     )
-          
-    fcursor=bd.cursor()
-    sql="INSERT INTO CLIENTES (NOMBRE,DIRECCION,CORREO,CONTRASENA) VALUES ('{0}','{1}','{2}','{3}')".format(nombreUsuario_entry.get(),direccionUsuario_entry.get(),correoUsuario_entry.get(),contrasena_entry.get())
+    
+    fcursor = bd.cursor()
+    sql = "INSERT INTO CLIENTES (NOMBRE, DIRECCION, CORREO, CONTRASENA) VALUES (%s, %s, %s, %s)"
+    values = (
+        nombreUsuario_entry.get(),
+        direccionUsuario_entry.get(),
+        correoUsuario_entry.get(),
+        contrasenaUsuario_entry.get()
+    )
 
     try:
-        fcursor.execute(sql)
+        fcursor.execute(sql, values)
         bd.commit()
         messagebox.showinfo(message="Registro exitoso", title="Aviso")
-    except:
+    except Exception as e:
         bd.rollback()
-        messagebox.showinfo(message="No exitoso", title="Aviso")
+        messagebox.showinfo(message=f"No exitoso: {str(e)}", title="Aviso")
+    finally:
+        bd.close()
+def validacion_datos():
+    usuario=usuario_verify.get()
+    contrasena=contrasena_verify.get()
+    bd = pymysql.connect(
+        host="localhost",
+        user="elares",
+        passwd="jhice1317",
+        db="elares"
+    )
+    
+    fcursor = bd.cursor()
+    fcursor.execute("SELECT contrasena FROM Clientes WHERE correo = %s AND contrasena = %s", (usuario, contrasena))
+    if fcursor.fetchall():
+        messagebox.showinfo(title="Inicio de sesion correcta", message="Usuario y Contraseña correcta")
+    else:
+        messagebox.showinfo(title="Inicio de sesion incorrecta", message="Usuario y/o Contraseña incorrecta")
     bd.close()
+
 
 menu_pantalla()
 
