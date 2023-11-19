@@ -7,14 +7,15 @@ import pymysql
 def menu_pantalla():
     # Crear la ventana principal
     global pantalla
+    
     pantalla=Tk()
     pantalla.geometry("300x380")
     pantalla.title("INICIA SESION")
-    pantalla.iconbitmap("C:/Users/Alexis Garcia Rojas/Desktop/Proyecto Elares/INICIO DE SESION/imgs/logo2.ico")
+    pantalla.iconbitmap("C:/Users/Alexis Garcia Rojas/Desktop/Proyecto Elares/ELARES/INICIO DE SESION/imgs/logo2.ico")
 
 
     # Abrir y redimensionar la imagen de fondo
-    imagen_fondo=Image.open("C:/Users/Alexis Garcia Rojas/Desktop/Proyecto Elares/INICIO DE SESION/imgs/ELARES1.gif")
+    imagen_fondo=Image.open("C:/Users/Alexis Garcia Rojas/Desktop/Proyecto Elares/ELARES/INICIO DE SESION/imgs/Elares-login2.png")
     imagen_fondo = imagen_fondo.resize((300, 380))
 
 
@@ -22,34 +23,11 @@ def menu_pantalla():
     imagen_fondo=ImageTk.PhotoImage(imagen_fondo)
 
     # Crear un Canvas para la imagen de fondo
+    global canvas
     canvas=Canvas(pantalla,width=300,height=380)
     canvas.pack()
     # Mostrar la imagen de fondo en el Canvas
     canvas.create_image(0, 0, anchor=NW, image=imagen_fondo)
-    # Crear etiquetas encima de la imagen de fondo
-    """label1 = Label(pantalla, text="Usuario", font=("calibri", 15), fg="black", bg="white")
-    label1.place(relx=0.5, rely=0.2, anchor='center')
-
-    label2 = Label(pantalla, text="Contraseña", font=("calibri", 15), fg="black", bg="white")
-    label2.place(relx=0.5, rely=0.4, anchor='center')"""
-
-    #Crear botones
-    Button (text="Iniciar Sesion", height=3,width=30,command=inicio_sesion).place(relx=0.5, rely=0.6, anchor='center')
-    Button (text="Registrarse", height=3,width=30 ).place(relx=0.5, rely=0.9, anchor='center')
-
-    # Iniciar el main
-    pantalla.mainloop()
-
-#Funciones - Metodos
-def inicio_sesion():
-    global pantalla1
-    pantalla1= Toplevel(pantalla)
-    pantalla1.geometry("400x250")
-    pantalla1.title("Inicio de Sesion")
-    pantalla1.iconbitmap("C:/Users/Alexis Garcia Rojas/Desktop/Proyecto Elares/INICIO DE SESION/imgs/logo2.ico")
-
-    Label(pantalla1,text="Por favor ingrese su usuario y contraseña a continuacion").pack()
-    Label(pantalla1,text="").pack()
 
     global usuario_verify
     global contrasena_verify
@@ -58,17 +36,105 @@ def inicio_sesion():
 
     global usuario_entry
     global contrasena_entry
-    Label(pantalla1,text="Usuario").pack()
-    usuario_entry=Entry(pantalla1,textvariable=usuario_verify)
-    usuario_entry.pack()
-    Label(pantalla1).pack()
+    
+    # Crear etiquetas encima de la imagen de fondo
+    label1 = Label(pantalla, text="Correo", font=("calibri", 12), fg="black", bg="white")
+    usuario_entry=Entry(pantalla,textvariable=usuario_verify)
+    usuario_entry.place(relx=0.6, rely=0.5, anchor='center',width=100)
+    label1.place(relx=0.5, rely=0.5, anchor='center')
 
-    Label(pantalla1,text="Contraseña").pack()
-    contrasena_entry=Entry(pantalla1,textvariable=contrasena_verify)
-    contrasena_entry.pack()
-    Label(pantalla1).pack()
+    label2 = Label(pantalla, text="Contraseña", font=("calibri", 12), fg="black", bg="white",width=11,height=1)
+    contrasena_entry=Entry(pantalla,textvariable=contrasena_verify)
+    contrasena_entry.place(relx=0.6, rely=0.6, anchor='center', width=100)
+    label2.place(relx=0.6, rely=0.6, anchor='center')
+    
 
-    Button(pantalla1,text="Iniciar Sesion").pack()
+    #Crear botones
+    Button (text="Iniciar Sesion", height=1,width=15,command="""inicio_sesion""").place(relx=0.5, rely=0.7, anchor='center')
+    Button (text="Registrarse", height=1,width=18, command=registrar_ventana ).place(relx=0.5, rely=0.9, anchor='center')
+
+    pantalla.resizable(width=False,height=False)
+    # Iniciar el main
+    pantalla.mainloop()
+
+#Funciones - Metodos
+#def inicio_sesion():
+    
+
+def registrar_ventana():
+   # Crear la ventana principal
+   
+    global pantalla2, canvas
+    pantalla2=Toplevel(pantalla)
+   
+    pantalla2.geometry("300x380")
+    pantalla2.title("INICIA SESION")
+    pantalla2.iconbitmap("C:/Users/Alexis Garcia Rojas/Desktop/Proyecto Elares/ELARES/INICIO DE SESION/imgs/logo2.ico")
+
+
+    # Abrir y redimensionar la imagen de fondo
+    imagen_fondo_registrar=Image.open("C:/Users/Alexis Garcia Rojas/Desktop/Proyecto Elares/ELARES/INICIO DE SESION/imgs/ElaresREGISTRARSE3.png")
+    imagen_fondo_registrar = imagen_fondo_registrar.resize((300, 380))
+
+
+    # Crear una PhotoImage para la imagen de fondo
+    imagen_fondo_registrar=ImageTk.PhotoImage(imagen_fondo_registrar)
+    
+
+    # Crear un Canvas para la imagen de fondo
+    canvas=Canvas(pantalla2,width=300,height=380)
+    canvas.pack()
+    # Mostrar la imagen de fondo en el Canvas
+    canvas.create_image(0, 0, anchor=NW, image=imagen_fondo_registrar)
+
+    # Crear etiquetas encima de la imagen de fondo
+    global correoUsuario_entry, contrasenaUsuario_entry, direccionUsuario_entry,nombreUsuario_entry
+    correoUsuario_entry=StringVar()
+    contrasenaUsuario_entry=StringVar()
+    direccionUsuario_entry=StringVar()
+    nombreUsuario_entry=StringVar()
+
+
+    direccionUsuario_entry=Entry(pantalla2)
+    direccionUsuario_entry.place(relx=0.6, rely=0.5, anchor='center',width=100)
+
+    nombreUsuario_entry=Entry(pantalla2)
+    nombreUsuario_entry.place(relx=0.6, rely=0.4, anchor='center',width=100)
+
+    correoUsuario_entry=Entry(pantalla2)
+    correoUsuario_entry.place(relx=0.6, rely=0.6, anchor='center',width=100)
+
+    contrasenaUsuario_entry=Entry(pantalla2)
+    contrasenaUsuario_entry.place(relx=0.6, rely=0.7, anchor='center',width=100)
+    
+    Button (pantalla2,text="Registrarse", height=1,width=18, command=insert_datos ).place(relx=0.5, rely=0.9, anchor='center')
+
+    pantalla2.resizable(width=False,height=False)
+
+    pantalla2.mainloop()
+def registrar():
+    # Cerrar la ventana actual antes de abrir la de registro
+    
+    registrar_ventana()    
+def insert_datos():
+    bd = pymysql.connect(
+        host="localhost",
+        user="elares",
+        passwd="jhice1317",
+        db="elares"
+    )
+          
+    fcursor=bd.cursor()
+    sql="INSERT INTO CLIENTES (NOMBRE,DIRECCION,CORREO,CONTRASENA) VALUES ('{0}','{1}','{2}','{3}')".format(nombreUsuario_entry.get(),direccionUsuario_entry.get(),correoUsuario_entry.get(),contrasena_entry.get())
+
+    try:
+        fcursor.execute(sql)
+        bd.commit()
+        messagebox.showinfo(message="Registro exitoso", title="Aviso")
+    except:
+        bd.rollback()
+        messagebox.showinfo(message="No exitoso", title="Aviso")
+    bd.close()
 
 menu_pantalla()
 
