@@ -2,7 +2,6 @@ import tkinter
 from tkinter import * 
 from tkinter import messagebox
 from PIL import Image,ImageTk
-import pymysql
 from db_conection import DatabaseConnection
 
 def menu_pantalla():
@@ -118,38 +117,42 @@ def registrar():
     
     registrar_ventana()    
 def insert_datos():
-    
-    
-    fcursor = DatabaseConnection.cursor()
-    sql = "INSERT INTO CLIENTES (NOMBRE, DIRECCION, CORREO, CONTRASENA) VALUES (%s, %s, %s, %s)"
-    values = (
-        nombreUsuario_entry.get(),
-        direccionUsuario_entry.get(),
-        correoUsuario_entry.get(),
-        contrasenaUsuario_entry.get()
-    )
+    db_conexion=DatabaseConnection()
+    if db_conexion.conectar_base_de_datos():
+        db= db_conexion.get_connection()
+        fcursor = db_conexion.get_cursor()
+        sql = "INSERT INTO CLIENTES (NOMBRE, DIRECCION, CORREO, CONTRASENA) VALUES (%s, %s, %s, %s)"
+        values = (
+            nombreUsuario_entry.get(),
+            direccionUsuario_entry.get(),
+            correoUsuario_entry.get(),
+            contrasenaUsuario_entry.get()
+        )
 
-    try:
-        fcursor.execute(sql, values)
-        DatabaseConnection.commit()
-        messagebox.showinfo(message="Registro exitoso", title="Aviso")
-    except Exception as e:
-        DatabaseConnection.rollback()
-        messagebox.showinfo(message=f"No exitoso: {str(e)}", title="Aviso")
-    finally:
-        DatabaseConnection.close()
+        try:
+            fcursor.execute(sql, values)
+            db.commit()
+            messagebox.showinfo(message="Registro exitoso", title="Aviso")
+        except Exception as e:
+            db.rollback()
+            messagebox.showinfo(message=f"No exitoso: {str(e)}", title="Aviso")
+        finally:
+            db.close()
 def validacion_datos():
+    db_conexion=DatabaseConnection()
+    
+
     usuario=usuario_verify.get()
     contrasena=contrasena_verify.get()
     
-    
-    fcursor = DatabaseConnection.cursor()
-    fcursor.execute("SELECT contrasena FROM Clientes WHERE correo = %s AND contrasena = %s", (usuario, contrasena))
-    if fcursor.fetchall():
-        messagebox.showinfo(title="Inicio de sesion correcta", message="Usuario y Contraseña correcta")
-    else:
-        messagebox.showinfo(title="Inicio de sesion incorrecta", message="Usuario y/o Contraseña incorrecta")
-    DatabaseConnection.close()
+    if db_conexion.conectar_base_de_datos():
+        fcursor = db_conexion.get_cursor()
+        fcursor.execute("SELECT contrasena FROM Clientes WHERE correo = %s AND contrasena = %s", (usuario, contrasena))
+        if fcursor.fetchall():
+            messagebox.showinfo(title="Inicio de sesion correcta", message="Usuario y Contraseña correcta")
+        else:
+            messagebox.showinfo(title="Inicio de sesion incorrecta", message="Usuario y/o Contraseña incorrecta")
+            db_conexion.close()
 
 
 menu_pantalla()
