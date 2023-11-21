@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import Image,ImageTk
 import pymysql
+from db_conection import DatabaseConnection
 
 def menu_pantalla():
     # Crear la ventana principal
@@ -117,14 +118,9 @@ def registrar():
     
     registrar_ventana()    
 def insert_datos():
-    bd = pymysql.connect(
-        host="localhost",
-        user="elares",
-        passwd="jhice1317",
-        db="elares"
-    )
     
-    fcursor = bd.cursor()
+    
+    fcursor = DatabaseConnection.cursor()
     sql = "INSERT INTO CLIENTES (NOMBRE, DIRECCION, CORREO, CONTRASENA) VALUES (%s, %s, %s, %s)"
     values = (
         nombreUsuario_entry.get(),
@@ -135,30 +131,25 @@ def insert_datos():
 
     try:
         fcursor.execute(sql, values)
-        bd.commit()
+        DatabaseConnection.commit()
         messagebox.showinfo(message="Registro exitoso", title="Aviso")
     except Exception as e:
-        bd.rollback()
+        DatabaseConnection.rollback()
         messagebox.showinfo(message=f"No exitoso: {str(e)}", title="Aviso")
     finally:
-        bd.close()
+        DatabaseConnection.close()
 def validacion_datos():
     usuario=usuario_verify.get()
     contrasena=contrasena_verify.get()
-    bd = pymysql.connect(
-        host="localhost",
-        user="elares",
-        passwd="jhice1317",
-        db="elares"
-    )
     
-    fcursor = bd.cursor()
+    
+    fcursor = DatabaseConnection.cursor()
     fcursor.execute("SELECT contrasena FROM Clientes WHERE correo = %s AND contrasena = %s", (usuario, contrasena))
     if fcursor.fetchall():
         messagebox.showinfo(title="Inicio de sesion correcta", message="Usuario y Contraseña correcta")
     else:
         messagebox.showinfo(title="Inicio de sesion incorrecta", message="Usuario y/o Contraseña incorrecta")
-    bd.close()
+    DatabaseConnection.close()
 
 
 menu_pantalla()
