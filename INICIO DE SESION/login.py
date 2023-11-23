@@ -8,7 +8,7 @@ def menu_pantalla():
     # Crear la ventana principal
     global pantalla
     
-    pantalla=Tk()
+    pantalla=Toplevel()
     pantalla.geometry("300x380")
     pantalla.title("INICIA SESION")
     pantalla.iconbitmap("C:/Users/Alexis Garcia Rojas/Desktop/Proyecto Elares/ELARES/INICIO DE SESION/imgs/logo2.ico")
@@ -50,8 +50,8 @@ def menu_pantalla():
     
 
     #Crear botones
-    Button (text="Iniciar Sesion", height=1,width=15,command=validacion_datos).place(relx=0.5, rely=0.7, anchor='center')
-    Button (text="Registrarse", height=1,width=18, command=registrar_ventana ).place(relx=0.5, rely=0.9, anchor='center')
+    Button (pantalla,text="Iniciar Sesion", height=1,width=15,command=validacion_datos).place(relx=0.5, rely=0.7, anchor='center')
+    Button (pantalla,text="Registrarse", height=1,width=18, command=registrar_ventana ).place(relx=0.5, rely=0.9, anchor='center')
 
     pantalla.resizable(width=False,height=False)
     # Iniciar el main
@@ -154,8 +154,8 @@ def validacion_datos():
             messagebox.showinfo(title="Inicio de sesion incorrecta", message="Usuario y/o Contraseña incorrecta")
             db_conexion.close()
 
-
-menu_pantalla()
+if __name__ =="__main__":
+    menu_pantalla()
 
 
 

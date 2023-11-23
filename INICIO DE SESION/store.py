@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from db_conection import DatabaseConnection
+from login import menu_pantalla
 
 class App(tk.Tk):
     def __init__(self):
@@ -28,7 +29,7 @@ class App(tk.Tk):
         self.provider_button = tk.Button(self, text="Encargar", font=("Helvetica", 12), bg="white")
         self.provider_button.pack(side=tk.BOTTOM, anchor=tk.SE, padx=10)
 
-        self.register_button = tk.Button(self, text="Registrarse", font=("Helvetica", 8), bg="white")
+        self.register_button = tk.Button(self, text="Registrarse", font=("Helvetica", 8), bg="white", command=self.llamar_login)
         self.register_button.pack(side=tk.RIGHT, anchor=tk.N, padx=0)
 
         # Área de contenido principal
@@ -100,7 +101,9 @@ class App(tk.Tk):
             messagebox.showinfo("Compra Exitosa", mensaje)
         else:
             messagebox.showwarning("Advertencia", "Por favor, seleccione un producto antes de comprar.")
-
+    def llamar_login(self):
+        menu_pantalla()
+        
 if __name__ == "__main__":
     app = App()
     app.mainloop()
